@@ -1,0 +1,59 @@
+<?php
+
+// HTML HEREDOC
+$zaglavlje_heredoc = <<<END_HTML
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <title>Zadatak</title> 
+    <style>
+        *{
+        font-size: 24px;
+        }
+        </style>
+</head>
+<body>
+(ne koriste se sve dvorane) <br> <br>
+END_HTML;
+
+$podnozje_heredoc = <<<END_HTML
+</body>
+</html>
+END_HTML;
+
+
+// BAZA PODATAKA
+$dbhost = 'localhost';
+$dbuser = 'fakultet';
+$dbpass = 'fakultet';
+$dbname = 'fakultet';
+$db = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+if (!$db) die('MYSQL Greška pri spajanju: ' . mysqli_error());
+echo 'MYSQL Spojen uspješno!<br><br>';
+
+
+// HTML ZAGLAVLJE
+echo $zaglavlje_heredoc;
+
+// HTML TIJELO
+
+// IZLISTAJ DVORANE
+$sql = 'SELECT oznDvorana FROM dvorana';
+$result = mysqli_query($db, $sql);
+
+if (mysqli_num_rows($result) > 0){
+    while($row = mysqli_fetch_assoc($result)) {  
+        $a = $row["oznDvorana"];
+        echo '<a href="rezervacija.php?sifra='. $a .'">'. $a . '</a><br />';      
+    }   
+} else {
+   echo "0 redova";
+}
+
+
+// HTML PODNOZJE
+echo $podnozje_heredoc;
+
+
+// ZATVORI BAZU
+mysqli_close($db);
